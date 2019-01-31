@@ -45,7 +45,10 @@ bindsym $mod+m exec makoctl invoke
 floating_modifier $mod normal
 bindsym $mod+Shift+c reload
 bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
-bindsym Print exec SCREENSHOT_FILE="$(xdg-user-dir SCREENSHOTS)/Screenshot_$(date '+%Y-%m-%d_%H:%M:%S').png" && grim -c "$SCREENSHOT_FILE" && imv -d -f "$SCREENSHOT_FILE" #Print 
+bindsym Print exec SCREENSHOT_FILE="$(xdg-user-dir SCREENSHOTS)/Screenshot_$(date '+%Y-%m-%d_%H:%M:%S').png" && grim -c "$SCREENSHOT_FILE" && imv -d -f -s none "$SCREENSHOT_FILE"
+bindsym $mod+Print exec SCREENSHOT_FILE="$(xdg-user-dir SCREENSHOTS)/Screenshot_$(date '+%Y-%m-%d_%H:%M:%S').png" && slurp | grim -g - "$SCREENSHOT_FILE" && imv -d -f -s none "$SCREENSHOT_FILE"
+bindsym Ctrl+Print exec grim -c - | wl-copy --type image/png
+bindsym Ctrl+$mod+Print exec slurp | grim -g - - | wl-copy --type image/png
 
 ### Fn keys
 bindsym XF86Launch1 exec $term -e alsamixer #F1
