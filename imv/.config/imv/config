@@ -1,0 +1,17 @@
+[options]
+
+# Don't suppress built-in key bindings
+suppress_default_binds = false
+
+[binds]
+
+# Delete/trash image, send notification and close image
+<Shift+Delete> = exec rm "$imv_current_file"; exec notify-send -t 5000 "Deleted $imv_current_file"; close
+<Delete> = exec gio trash "$imv_current_file"; exec notify-send -t 5000 "Trashed $imv_current_file"; close
+
+# Move to first/last image
+<Home> = select_abs 0
+<End> = select_abs -1
+
+# Reset zoom
+<Ctrl+0> = reset

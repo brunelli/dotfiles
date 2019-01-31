@@ -1,0 +1,11 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Version=1.0
+Terminal=false
+Type=Application
+Name=WhatsApp
+GenericName=Instant Messenger
+Comment=Quickly send and receive WhatsApp messages right from your computer
+Exec=chromium --app=https://web.whatsapp.com/ --profile=Default
+Icon=whatsapp-web
+StartupWMClass=whatsapp-web

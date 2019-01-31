@@ -1,0 +1,20 @@
+#!/bin/sh
+
+DIR=$(dirname "$0")
+MACHINE=$(uname -o)
+TEMP=$(mktemp)
+
+find "$DIR" -mindepth 1 -maxdepth 1 -type d -not -path "$DIR/.git" -exec basename {} \; > $TEMP
+
+case "$MACHINE" in
+    Android) set -- "${@}" termux ${TERMUX_STOW};;
+    GNU/Linux) set -- "${@}" $(grep -v "^termux$" $TEMP);;
+    *)
+        echo "Could not detect machine." >&2
+        rm $TEMP
+        exit 1
+esac
+
+rm $TEMP
+echo ":: Stowing machine $MACHINE"
+stow -v --dir="$DIR" --target="$HOME" "${@}"

@@ -1,0 +1,72 @@
+#!/data/data/com.termux/files/usr/bin/bash
+#
+# termux-url-opener
+
+shopt -s extglob
+
+declare -A OPTIONS=(
+    [1]='360p video'
+    [2]='480p video'
+    [3]='720p video'
+    [4]='1080p video'
+    [5]='Audio only'
+    [6]='Custom option'
+)
+
+declare -A COMMANDS=(
+    [1]='-f bestvideo[ext=mp4][height=360]+bestaudio[ext=m4a]/bestvideo[ext=webm][height=360]+bestaudio[ext=webm]/bestvideo[height=360]+bestaudio/best[height=360]'
+    [2]='-f bestvideo[ext=mp4][height=480]+bestaudio[ext=m4a]/bestvideo[ext=webm][height=480]+bestaudio[ext=webm]/bestvideo[height=480]+bestaudio/best[height=480]'
+    [3]='-f bestvideo[ext=mp4][height=720]+bestaudio[ext=m4a]/bestvideo[ext=webm][height=720]+bestaudio[ext=webm]/bestvideo[height=720]+bestaudio/best[height=720]'
+    [4]='-f bestvideo[ext=mp4][height=1080]+bestaudio[ext=m4a]/bestvideo[ext=webm][height=1080]+bestaudio[ext=webm]/bestvideo[height=1080]+bestaudio/best[height=1080]'
+    [5]='-f bestaudio[ext=m4a]/bestaudio -o $HOME/storage/music/%(title)s.%(ext)s'
+    [6]='custom'
+)
+
+print_help() {
+    cat << EOF
+The following commands are available:
+    <n>    select option <n>
+    <n>o   open file after download
+    <n>s   download subtitles
+       q   quit
+EOF
+}
+
+echo -e "Download with youtube-dl\n"
+for n in $(seq ${#OPTIONS[@]})
+do
+    echo "${n}) ${OPTIONS[$n]}"
+done
+echo
+
+while IFS='' read -r -e -p "Select an option: " COMMAND
+do
+    OPEN=0
+    SUBS=0
+    case $COMMAND in
+        [1-${#OPTIONS[@]}]*( |o|s))
+            ARGS=(${COMMANDS[${COMMAND//[!0-9]/}]})
+            while IFS='' read -r -d '' -n 1 arg
+            do
+                case $arg in
+                    o) OPEN=1;;
+                    s)
+                        [[ ${COMMAND//[!0-9]/} != 5 ]] &&
+                        SUBS=1 ||
+                        echo "Subtitles won't be downloaded."
+                        ;;
+                esac
+            done < <(printf %s "${COMMAND#*[0-9]}")
+            [[ "${ARGS}" == "custom" ]] && read -r -e -p "$ youtube-dl " ARGS
+            break
+            ;;
+        h|help) print_help;;
+        q|quit|exit) exit;;
+        *) echo "Invalid option.";;
+    esac
+done
+
+((OPEN)) && ARGS+=('--exec' 'termux-media-scan -v {}; termux-open {}')
+((SUBS)) && ARGS+=('--all-subs' '--embed-sub')
+
+youtube-dl "${ARGS[@]}" "$1"

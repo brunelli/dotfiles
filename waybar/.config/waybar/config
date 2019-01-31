@@ -1,0 +1,52 @@
+{
+    "layer": "top",
+    "position": "top",
+    "height": 22,
+    "width": 1366,
+    "modules-left": ["sway/workspaces", "sway/mode"],
+    "modules-center": ["sway/window"],
+    "modules-right": ["tray", "custom/gpgstatus", "pulseaudio", "network", "clock"],
+    "sway/workspaces": {
+        "disable-scroll": false,
+        "all-outputs": true
+    },
+    "sway/mode": {
+        "format": "<span style=\"italic\">{}</span>",
+        "on-click": "swaymsg 'mode default'"
+    },
+    "sway/window": {
+        "max-length": 50
+    },
+    "clock": {
+        "format": "{:%H:%M}",
+        "format-alt": "{:%d/%m/%Y}",
+        "on-click-right": "run-in-default-terminal full-calendar"
+    },
+    "network": {
+        "format-wifi": "{essid} ",
+        "format-ethernet": "{ifname} ",
+        "format-disconnected": "Disconnected ⚠",
+        "on-click": "run-in-default-terminal sudo wifi-menu",
+        "on-click-right": "run-in-default-terminal sudo wifi-menu"
+    },
+    "pulseaudio": {
+        "format": "{volume}% {icon}",
+        "format-muted": "",
+        "format-icons": ["", ""],
+        "on-click": "amixer -D pulse sset Master toggle -q",
+        "on-click-right": "run-in-default-terminal alsamixer",
+        "on-scroll-up": "amixer set Master 5+ unmute -q",
+        "on-scroll-down": "amixer set Master 5- unmute -q"
+    },
+    "tray": {
+        "icon-size": 20,
+        "spacing": 10
+    },
+    "custom/gpgstatus": {
+        "exec": "gpg-status",
+        "interval": 2,
+        "on-click": "gpg-status toggle",
+        "on-click-right": "gpg-status toggle",
+        "return-type": "json"
+    }
+}

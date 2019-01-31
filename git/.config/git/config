@@ -1,0 +1,13 @@
+[user]
+	name = Ian Brunelli
+	email = ian@brunelli.me
+[core]
+	pager = less -+F -+X
+[credential]
+	helper = store
+[push]
+	default = matching
+[url "https://aur.archlinux.org/"]
+	insteadOf = "aur:"
+[pull]
+	rebase = true
