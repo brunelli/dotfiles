@@ -1,61 +1,48 @@
+# Options
+set __fish_git_prompt_show_informative_status
+set __fish_git_prompt_showcolorhints
+set __fish_git_prompt_showupstream "informative"
+set __fish_git_prompt_char_stateseparator " "
+set __fish_git_prompt_char_cleanstate ""
+
+# Colors
+set -l green 64FE00
+set -l grey B5B5B5
+set -l red FF000D
+set -l yellow FFCF33
+
+set __fish_git_prompt_color_branch white --bold
+set __fish_git_prompt_color_branch_detached $red
+set __fish_git_prompt_color_dirtystate white
+set __fish_git_prompt_color_invalidstate $red
+set __fish_git_prompt_color_merging $yellow
+set __fish_git_prompt_color_stagedstate $yellow
+set __fish_git_prompt_color_untrackedfiles $grey
+set __fish_git_prompt_color_upstream_ahead $green
+set __fish_git_prompt_color_upstream_behind $red
+
 function fish_prompt
-    if not set -q -g __fish_prompt_functions_defined
-        set -g __fish_prompt_functions_defined
-
-        function _git_branch_name
-            git branch --no-color 2> /dev/null | sed -n "s/^\*[[:space:]]\(.*\)\$/\1/p"
-        end
-
-        function _git_dirty
-            git status --porcelain --ignore-submodules=dirty 2> /dev/null | wc -l
-        end
-
-        function _git_staged
-            git diff --cached --numstat 2> /dev/null | wc -l
-        end
-
-        function _prompt_format_number
-            if [ $argv[1] -le 9 ]
-            and [ "$TERM" != "linux" ]
-                echo (set_color -o $argv[2] -b normal)$argv[1]\UFE0F\U20E3
-            else
-                echo (set_color -o FFFFFF -b $argv[2])$argv[1]
-            end
-        end
-    end
-
-    set -l normal_color (set_color normal -b normal)
-    set -l git_branch_color (set_color -o FFFFFF -b normal)
-    set -l colon_color (set_color -o 3366FF -b normal)
-    set -l dir_name (set_color -o FF3366 -b normal)(basename (prompt_pwd))
-    set -l git_branch_name (_git_branch_name)
+    set -l _last_status $status
+    set -l _git_prompt (__fish_git_prompt)
 
     if [ "$TERM" = "linux" ]
-        set -x ssh [ssh]
-        set -x arrow \U002D\U003E
+        set ssh [ssh]
+        set arrow \U002D\U003E
     else
-        set -x ssh \U26A1
-        set -x arrow \U279C
+        set ssh \U26A1
+        set arrow \U279C
     end
 
-    if [ "$git_branch_name" ]
-        set -l git_branch $git_branch_color$git_branch_name
-        set -x git_info $colon_color:$git_branch$normal_color
-        set -x git_staged (_git_staged)
-        set -x git_dirty (expr (_git_dirty) - $git_staged) # FIXME
-
-        if [ (git branch -vv | grep "^* .*\[.*: ahead.*\].*\$") ]
-            set git_info $git_info\*
-        end
-
-        if [ $git_staged -gt 0 ]
-            set git_info $git_info (_prompt_format_number $git_staged 849900)
-        end
-
-        if [ $git_dirty -gt 0 ]
-            set git_info $git_info (_prompt_format_number $git_dirty FF8A00)
-        end
-    end
+    [ $_last_status -gt 0 ] && [ $CMD_DURATION -gt 0 ] && printf "%s\n" "[$_last_status]"
     set -q SSH_CLIENT || set -q SSH_CONNECTION || set -q SSH_TTY && printf "%s" "$ssh "
-    printf "%s" "$dir_name$git_info$normal_color $arrow "
+    set_color FF3366
+    printf "%s" (basename (prompt_pwd))
+    if [ $_git_prompt ]
+        set_color 3366FF
+        printf "%s" ":"
+        set_color normal
+        printf "%s" $_git_prompt | sed -n 's/^ (\(.*[^ ]\)[ ]\?)$/\1/p'
+    end
+    set_color normal
+    printf " %s " "$arrow"
 end
