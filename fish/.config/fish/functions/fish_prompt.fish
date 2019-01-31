@@ -31,8 +31,10 @@ function fish_prompt
     set -l git_branch_name (_git_branch_name)
 
     if [ "$TERM" = "linux" ]
+        set -x ssh [ssh]
         set -x arrow \U002D\U003E
     else
+        set -x ssh \U26A1
         set -x arrow \U279C
     end
 
@@ -54,5 +56,6 @@ function fish_prompt
             set git_info $git_info (_prompt_format_number $git_dirty FF8A00)
         end
     end
-    echo -n "$dir_name$git_info$normal_color $arrow "
+    set -q SSH_CLIENT || set -q SSH_CONNECTION || set -q SSH_TTY && printf "%s" "$ssh "
+    printf "%s" "$dir_name$git_info$normal_color $arrow "
 end
