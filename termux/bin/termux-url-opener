@@ -43,7 +43,7 @@ while IFS='' read -r -e -p "Select an option: " COMMAND
 do
     OPEN=0
     SUBS=0
-    case $COMMAND in
+    case ${COMMAND,,} in
         [1-${#OPTIONS[@]}]*( |o|s))
             ARGS=(${COMMANDS[${COMMAND//[!0-9]/}]})
             while IFS='' read -r -d '' -n 1 arg
