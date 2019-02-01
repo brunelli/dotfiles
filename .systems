@@ -1,0 +1,8 @@
+# All systems
+* = aria2 git vim
+
+# Laptop
+GNU/Linux = fish fontconfig imv kitty mpv pacman rofi sway systemd tbsm waybar whatsapp-web yay youtube-dl
+
+# Phone (Termux)
+Android = termux
