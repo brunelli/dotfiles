@@ -10,16 +10,18 @@ declare -A OPTIONS=(
     [3]='720p video'
     [4]='1080p video'
     [5]='Audio only'
-    [6]='Custom option'
+    [6]='File with aria2'
+    [7]='With custom command'
 )
 
 declare -A COMMANDS=(
-    [1]='-f bestvideo[ext=mp4][height=360]+bestaudio[ext=m4a]/bestvideo[ext=webm][height=360]+bestaudio[ext=webm]/bestvideo[height=360]+bestaudio/best[height=360]'
-    [2]='-f bestvideo[ext=mp4][height=480]+bestaudio[ext=m4a]/bestvideo[ext=webm][height=480]+bestaudio[ext=webm]/bestvideo[height=480]+bestaudio/best[height=480]'
-    [3]='-f bestvideo[ext=mp4][height=720]+bestaudio[ext=m4a]/bestvideo[ext=webm][height=720]+bestaudio[ext=webm]/bestvideo[height=720]+bestaudio/best[height=720]'
-    [4]='-f bestvideo[ext=mp4][height=1080]+bestaudio[ext=m4a]/bestvideo[ext=webm][height=1080]+bestaudio[ext=webm]/bestvideo[height=1080]+bestaudio/best[height=1080]'
-    [5]='-f bestaudio[ext=m4a]/bestaudio -o $HOME/storage/music/%(title)s.%(ext)s'
-    [6]='custom'
+    [1]='youtube-dl -f bestvideo[ext=mp4][height=360]+bestaudio[ext=m4a]/bestvideo[ext=webm][height=360]+bestaudio[ext=webm]/bestvideo[height=360]+bestaudio/best[height=360]'
+    [2]='youtube-dl -f bestvideo[ext=mp4][height=480]+bestaudio[ext=m4a]/bestvideo[ext=webm][height=480]+bestaudio[ext=webm]/bestvideo[height=480]+bestaudio/best[height=480]'
+    [3]='youtube-dl -f bestvideo[ext=mp4][height=720]+bestaudio[ext=m4a]/bestvideo[ext=webm][height=720]+bestaudio[ext=webm]/bestvideo[height=720]+bestaudio/best[height=720]'
+    [4]='youtube-dl -f bestvideo[ext=mp4][height=1080]+bestaudio[ext=m4a]/bestvideo[ext=webm][height=1080]+bestaudio[ext=webm]/bestvideo[height=1080]+bestaudio/best[height=1080]'
+    [5]="youtube-dl -f bestaudio[ext=m4a]/bestaudio -o ${HOME}/storage/music/%(title)s.%(ext)s"
+    [6]="aria2c --on-download-complete=${PREFIX}/bin/termux-media-scan --dir=${HOME}/storage/downloads"
+    [7]='custom'
 )
 
 print_help() {
@@ -32,7 +34,7 @@ The following commands are available:
 EOF
 }
 
-echo -e "Download with youtube-dl\n"
+echo -e "Download:\n"
 for n in $(seq ${#OPTIONS[@]})
 do
     echo "${n}) ${OPTIONS[$n]}"
@@ -46,18 +48,22 @@ do
     case ${COMMAND,,} in
         [1-${#OPTIONS[@]}]*( |o|s))
             ARGS=(${COMMANDS[${COMMAND//[!0-9]/}]})
+            [[ "${ARGS[0]}" == "custom" ]] && read -r -e -p "$ " ARGS
             while IFS='' read -r -d '' -n 1 arg
             do
                 case $arg in
-                    o) OPEN=1;;
+                    o)
+                        [[ "${ARGS[0]}" == "youtube-dl" ]] &&
+                        OPEN=1 ||
+                        echo -e "\e[1m\e[33mWARN\e[0m: Can't open."
+                        ;;
                     s)
-                        [[ ${COMMAND//[!0-9]/} != 5 ]] &&
+                        [[ "${ARGS[0]}" == "youtube-dl" ]] &&
                         SUBS=1 ||
-                        echo "Subtitles won't be downloaded."
+                        echo -e "\e[1m\e[33mWARN\e[0m: Subtitles won't be downloaded."
                         ;;
                 esac
             done < <(printf %s "${COMMAND#*[0-9]}")
-            [[ "${ARGS}" == "custom" ]] && read -r -e -p "$ youtube-dl " ARGS
             break
             ;;
         h|help) print_help;;
@@ -69,4 +75,6 @@ done
 ((OPEN)) && ARGS+=('--exec' 'termux-media-scan -v {}; termux-open {}')
 ((SUBS)) && ARGS+=('--all-subs' '--embed-sub')
 
-youtube-dl "${ARGS[@]}" "$1"
+termux-wake-lock
+"${ARGS[@]}" "$1"
+termux-wake-unlock
