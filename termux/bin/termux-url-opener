@@ -9,9 +9,10 @@ declare -A OPTIONS=(
     [2]='480p video'
     [3]='720p video'
     [4]='1080p video'
-    [5]='Audio only'
-    [6]='File with aria2'
-    [7]='With custom command'
+    [5]='Best video'
+    [6]='Audio only'
+    [7]='File with aria2'
+    [8]='With custom command'
 )
 
 declare -A COMMANDS=(
@@ -19,9 +20,10 @@ declare -A COMMANDS=(
     [2]='youtube-dl -f bestvideo[ext=mp4][height=480]+bestaudio[ext=m4a]/bestvideo[ext=webm][height=480]+bestaudio[ext=webm]/bestvideo[height=480]+bestaudio/best[height=480]'
     [3]='youtube-dl -f bestvideo[ext=mp4][height=720]+bestaudio[ext=m4a]/bestvideo[ext=webm][height=720]+bestaudio[ext=webm]/bestvideo[height=720]+bestaudio/best[height=720]'
     [4]='youtube-dl -f bestvideo[ext=mp4][height=1080]+bestaudio[ext=m4a]/bestvideo[ext=webm][height=1080]+bestaudio[ext=webm]/bestvideo[height=1080]+bestaudio/best[height=1080]'
-    [5]="youtube-dl -f bestaudio[ext=m4a]/bestaudio -o ${HOME}/storage/music/%(title)s.%(ext)s"
-    [6]="aria2c --on-download-complete=${PREFIX}/bin/termux-media-scan --dir=${HOME}/storage/downloads"
-    [7]='custom'
+    [5]='youtube-dl -f bestvideo+bestaudio/best'
+    [6]="youtube-dl -f bestaudio[ext=m4a]/bestaudio -o ${HOME}/storage/music/%(title)s.%(ext)s"
+    [7]="aria2c --on-download-complete=${PREFIX}/bin/termux-media-scan --dir=${HOME}/storage/downloads"
+    [8]='custom'
 )
 
 print_help() {
