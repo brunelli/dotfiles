@@ -2,81 +2,40 @@
 #
 # termux-url-opener
 
-shopt -s extglob
+declare -r OPTIONS="Download video – Best,Download video – 1080p,Download video – 720p, Download video – 480p,Download video – 360p,Download audio,Download file (aria2),Download file (custom)"
 
-declare -A OPTIONS=(
-    [1]='360p video'
-    [2]='480p video'
-    [3]='720p video'
-    [4]='1080p video'
-    [5]='Best video'
-    [6]='Audio only'
-    [7]='File with aria2'
-    [8]='With custom command'
+declare -a COMMANDS=(
+    'youtube-dl -f bestvideo+bestaudio/best'
+    'youtube-dl -f bestvideo[ext=mp4][height=1080]+bestaudio[ext=m4a]/bestvideo[ext=webm][height=1080]+bestaudio[ext=webm]/bestvideo[height=1080]+bestaudio/best[height=1080]'
+    'youtube-dl -f bestvideo[ext=mp4][height=720]+bestaudio[ext=m4a]/bestvideo[ext=webm][height=720]+bestaudio[ext=webm]/bestvideo[height=720]+bestaudio/best[height=720]'
+    'youtube-dl -f bestvideo[ext=mp4][height=480]+bestaudio[ext=m4a]/bestvideo[ext=webm][height=480]+bestaudio[ext=webm]/bestvideo[height=480]+bestaudio/best[height=480]'
+    'youtube-dl -f bestvideo[ext=mp4][height=360]+bestaudio[ext=m4a]/bestvideo[ext=webm][height=360]+bestaudio[ext=webm]/bestvideo[height=360]+bestaudio/best[height=360]'
+    "youtube-dl -f bestaudio[ext=m4a]/bestaudio -o ${HOME}/storage/music/%(title)s.%(ext)s"
+    "aria2c --on-download-complete=${PREFIX}/bin/termux-media-scan --dir=${HOME}/storage/downloads"
+    'custom'
 )
 
-declare -A COMMANDS=(
-    [1]='youtube-dl -f bestvideo[ext=mp4][height=360]+bestaudio[ext=m4a]/bestvideo[ext=webm][height=360]+bestaudio[ext=webm]/bestvideo[height=360]+bestaudio/best[height=360]'
-    [2]='youtube-dl -f bestvideo[ext=mp4][height=480]+bestaudio[ext=m4a]/bestvideo[ext=webm][height=480]+bestaudio[ext=webm]/bestvideo[height=480]+bestaudio/best[height=480]'
-    [3]='youtube-dl -f bestvideo[ext=mp4][height=720]+bestaudio[ext=m4a]/bestvideo[ext=webm][height=720]+bestaudio[ext=webm]/bestvideo[height=720]+bestaudio/best[height=720]'
-    [4]='youtube-dl -f bestvideo[ext=mp4][height=1080]+bestaudio[ext=m4a]/bestvideo[ext=webm][height=1080]+bestaudio[ext=webm]/bestvideo[height=1080]+bestaudio/best[height=1080]'
-    [5]='youtube-dl -f bestvideo+bestaudio/best'
-    [6]="youtube-dl -f bestaudio[ext=m4a]/bestaudio -o ${HOME}/storage/music/%(title)s.%(ext)s"
-    [7]="aria2c --on-download-complete=${PREFIX}/bin/termux-media-scan --dir=${HOME}/storage/downloads"
-    [8]='custom'
-)
+declare -r SELECTION=$(termux-dialog sheet -v "${OPTIONS}")
+declare -a OPTION=($(sed -n 's/^ *"text": "\(.*\)",\?$/\1/p' <<< "${SELECTION}"))
+[[ -n "${OPTION[0]}" ]] || exit 1
+declare -r COMMAND=$(sed -n 's/^ *"index": \(.*\)$/\1/p' <<< "${SELECTION}")
+declare -a ARGS=(${COMMANDS[${COMMAND}]})
+if [[ "${ARGS[0]}" == "custom" ]]
+then
+    declare -r CUSTOM_SEL=$(termux-dialog text -i 'Enter custom command')
+    declare -a ARGS=($(sed -n 's/^ *"text": "\(.*\)",\?$/\1/p' <<< "${CUSTOM_SEL}"))
+    [[ -n "${ARGS[0]}" ]] || exit 1
+elif [[ "${ARGS[0]}" == "youtube-dl" ]]
+then
+    declare -r YTDL_SEL=$(termux-dialog checkbox -t 'Select other options' -v 'Open after download,Share after download,Embed subtitles')
+    declare -r YTDL_OPT=($(sed -n 's/^ *"text": "\(.*\)"$/\1/p' <<< "${YTDL_SEL}"))
+    [[ "${YTDL_OPT[@]}" =~ "Open after download" ]] && ARGS+=('--exec' 'termux-media-scan -v {}; termux-open {}')
+    [[ "${YTDL_OPT[@]}" =~ "Share after download" ]] && ARGS+=('--exec' 'termux-media-scan -v {}; termux-share -a send {}')
+    [[ "${YTDL_OPT[@]}" =~ "Embed subtitles" ]] && ARGS+=('--all-subs' '--embed-sub')
+fi
 
-print_help() {
-    cat << EOF
-The following commands are available:
-    <n>    select option <n>
-    <n>o   open file after download
-    <n>s   download subtitles
-       q   quit
-EOF
-}
-
-echo -e "Download:\n"
-for n in $(seq ${#OPTIONS[@]})
-do
-    echo "${n}) ${OPTIONS[$n]}"
-done
-echo
-
-while IFS='' read -r -e -p "Select an option: " COMMAND
-do
-    OPEN=0
-    SUBS=0
-    case ${COMMAND,,} in
-        [1-${#OPTIONS[@]}]*( |o|s))
-            ARGS=(${COMMANDS[${COMMAND//[!0-9]/}]})
-            [[ "${ARGS[0]}" == "custom" ]] && read -r -e -p "$ " ARGS
-            while IFS='' read -r -d '' -n 1 arg
-            do
-                case $arg in
-                    o)
-                        [[ "${ARGS[0]}" == "youtube-dl" ]] &&
-                        OPEN=1 ||
-                        echo -e "\e[1m\e[33mWARN\e[0m: Can't open."
-                        ;;
-                    s)
-                        [[ "${ARGS[0]}" == "youtube-dl" ]] &&
-                        SUBS=1 ||
-                        echo -e "\e[1m\e[33mWARN\e[0m: Subtitles won't be downloaded."
-                        ;;
-                esac
-            done < <(printf %s "${COMMAND#*[0-9]}")
-            break
-            ;;
-        h|help) print_help;;
-        q|quit|exit) exit;;
-        *) echo "Invalid option.";;
-    esac
-done
-
-((OPEN)) && ARGS+=('--exec' 'termux-media-scan -v {}; termux-open {}')
-((SUBS)) && ARGS+=('--all-subs' '--embed-sub')
+printf "%s\n" "Exec: ${ARGS[@]} $1"
 
 termux-wake-lock
-"${ARGS[@]}" "$1"
+exec "${ARGS[@]}" "$1"
 termux-wake-unlock
