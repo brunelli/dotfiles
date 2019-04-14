@@ -48,8 +48,7 @@
         "format-icons": ["", ""],
         "on-click": "amixer -D pulse sset Master toggle -q",
         "on-click-right": "pavucontrol",
-        "on-scroll-up": "amixer set Master 15+ unmute -q",
-        "on-scroll-down": "amixer set Master 15- unmute -q",
+        "scroll-step": 10,
         "tooltip": false
     },
     "tray": {
