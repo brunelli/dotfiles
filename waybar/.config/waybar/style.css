@@ -1,7 +1,7 @@
 * {
     border: none;
     border-radius: 0;
-    font-family: Roboto, Helvetica, Arial, sans-serif;
+    font-family: Roboto, sans-serif;
     font-size: 13px;
     min-height: 0;
 }
@@ -20,58 +20,21 @@ window#waybar {
 }
 
 #workspaces button.focused {
-    background: #64727D;
+    background: #64727d;
     border-bottom: 3px solid white;
 }
 
 #mode {
-    background: #64727D;
-    border-bottom: 3px solid white;
+    background: #64727d;
 }
 
-#clock, #battery, #cpu, #memory, #network, #pulseaudio, #custom-gpgstatus, #tray, #mode {
+#clock, #network, #pulseaudio, #custom-gpgstatus, #custom-addworkspace, #custom-launcher, #tray, #mode {
     padding: 0 10px;
-    margin: 0 5px;
+    border-bottom: 3px solid rgba(0, 0, 0, 0.2);
 }
 
 #clock {
-    background-color: #64727D;
-}
-
-#battery {
-    background-color: #ffffff;
-    color: black;
-}
-
-#battery.charging {
-    color: white;
-    background-color: #26A65B;
-}
-
-@keyframes blink {
-    to {
-        background-color: #ffffff;
-        color: black;
-    }
-}
-
-#battery.warning:not(.charging) {
-    background: #f53c3c;
-    color: white;
-    animation-name: blink;
-    animation-duration: 0.5s;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
-}
-
-#cpu {
-    background: #2ecc71;
-    color: #000000;
-}
-
-#memory {
-    background: #9b59b6;
+    background: #64727d;
 }
 
 #network {
@@ -93,13 +56,18 @@ window#waybar {
 }
 
 #tray {
-    background-color: #2980b9;
+    background: #2980b9;
 }
 
 #custom-gpgstatus.locked {
-    background-color: #66bb6a;
+    background: #66bb6a;
 }
 
 #custom-gpgstatus.unlocked {
-    background-color: #c62828;
+    background: #c62828;
+}
+
+#custom-launcher {
+    background: #000000;
+    border-bottom: 3px solid #0e0e0e;
 }

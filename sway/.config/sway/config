@@ -1,12 +1,13 @@
 ### Variables
 set $mod Mod4
 set $term kitty
-set $menu rofi -show drun -show-icons
-set $run rofi -show run
-set $pass pass-copy -p pass -i
-set $clip clipmenu-rofi
+set $menu rofi-helper rofi -show drun -show-icons
+set $run rofi-helper rofi -show run
+set $pass rofi-helper pass-copy -p pass -i
+set $clip rofi-helper clipmenu-rofi
 set $lock \
-    grim - | ffmpeg -loglevel quiet -y -i pipe: -vf "gblur=sigma=12" /tmp/lock.png && \
+    pidof swaylock > /dev/null || \
+    grim - | corrupter - > /tmp/lock.png && \
     swaylock -efr \
         --image /tmp/lock.png \
         --indicator-radius 80 \
@@ -18,7 +19,7 @@ set $lock \
 output * bg ~/.local/share/wallpaper.png fill
 
 ### Idle configuration
-exec swayidle \
+exec swayidle -w \
     timeout 300 "$lock" \
     timeout 600 'swaymsg "output * dpms off"' \
        resume 'swaymsg "output * dpms on"' \
@@ -32,15 +33,17 @@ input "2:7:SynPS/2_Synaptics_TouchPad" {
     middle_emulation enabled
 }
 seat seat0 hide_cursor 3000
+input * xkb_numlock enabled
 
 ### Key bindings
 bindsym $mod+Return exec $term
+bindsym $mod+KP_Enter exec $term
 bindsym $mod+q kill
 bindsym $mod+d exec $menu
 bindsym Mod1+F2 exec $run
 bindsym $mod+p exec $pass
 bindsym Mod1+v exec $clip
-bindsym Mod1+Ctrl+v exec clipdel --current
+bindsym Mod1+Ctrl+v exec clipdel --current --delete
 bindsym $mod+m exec makoctl invoke
 floating_modifier $mod normal
 bindsym $mod+Shift+c reload
@@ -121,6 +124,8 @@ bindsym $mod+r mode "resize"
 # Auto-floating windows
 for_window [class="mpv"] floating enable
 no_focus [class="mpv"]
+for_window [title="Picture-in-picture"] floating enable
+no_focus [title="Picture-in-picture"]
 for_window [title="SpeedCrunch"] floating enable
 
 # Application launcher
@@ -140,5 +145,8 @@ hide_edge_borders both
 
 # Layout
 workspace_layout tabbed
+
+# Colors
+client.focused #0E0E0E #0E0E0E #FFFFFF #E5E5E5 #0E0E0E
 
 include /etc/sway/config.d/*

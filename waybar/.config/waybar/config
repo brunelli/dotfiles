@@ -2,51 +2,67 @@
     "layer": "top",
     "position": "top",
     "height": 22,
-    "width": 1366,
-    "modules-left": ["sway/workspaces", "sway/mode"],
+    "modules-left": ["custom/launcher", "sway/workspaces", "custom/addworkspace", "sway/mode"],
     "modules-center": ["sway/window"],
     "modules-right": ["tray", "custom/gpgstatus", "pulseaudio", "network", "clock"],
+    "custom/launcher": {
+        "format": "",
+        "on-click": "rofi-helper rofi -show drun -show-icons",
+        "tooltip": false
+    },
     "sway/workspaces": {
         "disable-scroll": false,
         "all-outputs": true
     },
     "sway/mode": {
         "format": "<span style=\"italic\">{}</span>",
-        "on-click": "swaymsg 'mode default'"
+        "on-click": "swaymsg 'mode default'",
+        "tooltip": false
+    },
+    "custom/addworkspace": {
+        "format": "",
+        "on-click": "sway-add-workspace",
+        "tooltip": false
     },
     "sway/window": {
-        "max-length": 50
+        "max-length": 50,
+        "tooltip": false
     },
     "clock": {
         "format": "{:%H:%M}",
         "format-alt": "{:%d/%m/%Y}",
-        "on-click-right": "run-in-default-terminal full-calendar"
+        "on-click-right": "run-in-default-terminal full-calendar",
+        "tooltip": false
     },
     "network": {
         "format-wifi": "{essid} ",
         "format-ethernet": "{ifname} ",
         "format-disconnected": "Disconnected ⚠",
         "on-click": "run-in-default-terminal sudo wifi-menu",
-        "on-click-right": "run-in-default-terminal sudo wifi-menu"
+        "on-click-right": "run-in-default-terminal sudo wifi-menu",
+        "tooltip": false
     },
     "pulseaudio": {
         "format": "{volume}% {icon}",
         "format-muted": "",
         "format-icons": ["", ""],
         "on-click": "amixer -D pulse sset Master toggle -q",
-        "on-click-right": "run-in-default-terminal alsamixer",
-        "on-scroll-up": "amixer set Master 5+ unmute -q",
-        "on-scroll-down": "amixer set Master 5- unmute -q"
+        "on-click-right": "pavucontrol",
+        "on-scroll-up": "amixer set Master 15+ unmute -q",
+        "on-scroll-down": "amixer set Master 15- unmute -q",
+        "tooltip": false
     },
     "tray": {
         "icon-size": 20,
-        "spacing": 10
+        "spacing": 10,
+        "tooltip": false
     },
     "custom/gpgstatus": {
         "exec": "gpg-status",
         "interval": 2,
         "on-click": "gpg-status toggle",
         "on-click-right": "gpg-status toggle",
-        "return-type": "json"
+        "return-type": "json",
+        "tooltip": false
     }
 }

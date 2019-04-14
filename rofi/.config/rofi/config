@@ -1,4 +1,4 @@
 rofi.modi: window,run,drun
 rofi.no-lazy-grab: true
 rofi.terminal: kitty
-rofi.theme: solarized_alternate
+rofi.theme: Arc-Dark
