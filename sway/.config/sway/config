@@ -47,7 +47,7 @@ bindsym Mod1+Ctrl+v exec clipdel --current --delete
 bindsym $mod+m exec makoctl invoke
 floating_modifier $mod normal
 bindsym $mod+Shift+c reload
-bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
+bindsym $mod+Shift+e exec rofi-helper rofi-power 'swaymsg exit'
 bindsym Print exec SCREENSHOT_FILE="$(xdg-user-dir SCREENSHOTS)/Screenshot_$(date '+%Y-%m-%d_%H:%M:%S').png" && grim -c "$SCREENSHOT_FILE" && imv -d -f -s none "$SCREENSHOT_FILE"
 bindsym $mod+Print exec SCREENSHOT_FILE="$(xdg-user-dir SCREENSHOTS)/Screenshot_$(date '+%Y-%m-%d_%H:%M:%S').png" && slurp | grim -g - "$SCREENSHOT_FILE" && imv -d -f -s none "$SCREENSHOT_FILE"
 bindsym Ctrl+Print exec grim -c - | wl-copy --type image/png
@@ -128,15 +128,6 @@ for_window [title="Picture-in-picture"] floating enable
 no_focus [title="Picture-in-picture"]
 for_window [title="SpeedCrunch"] floating enable
 
-# Application launcher
-exec $menu 
-
-# Status Bar
-exec waybar
-
-# Notification daemon
-exec mako
-
 # Borders
 titlebar_border_thickness 0
 default_border pixel 3
@@ -146,7 +137,17 @@ hide_edge_borders both
 # Layout
 workspace_layout tabbed
 
-# Colors
-client.focused #0E0E0E #0E0E0E #FFFFFF #E5E5E5 #0E0E0E
+# Font and colors
+font pango:'Noto Sans Display' 8
+client.focused #0E0E0E #0E0E0E #FFFFFF #0E0E0E #0E0E0E
+
+# Status Bar
+exec waybar
+
+# Notification daemon
+exec mako
+
+# Application launcher
+exec $menu
 
 include /etc/sway/config.d/*
