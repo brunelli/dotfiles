@@ -1,7 +1,8 @@
 * {
     border: none;
     border-radius: 0;
-    font-family: Roboto, sans-serif;
+    font-family: 'Noto Sans Display', sans-serif;
+    font-weight: 500;
     font-size: 13px;
     min-height: 0;
 }
@@ -13,24 +14,36 @@ window#waybar {
 }
 
 #workspaces button {
-    padding: 0 5px;
     background: transparent;
-    color: white;
     border-bottom: 3px solid transparent;
+    color: #a0a0a0;
+    padding: 0 5px;
 }
 
 #workspaces button.focused {
-    background: #64727d;
-    border-bottom: 3px solid white;
+    border-color: white;
+    color: white;
+}
+
+#custom-addworkspace {
+    border-bottom: 3px solid transparent;
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 0 10px;
 }
 
 #mode {
     background: #64727d;
 }
 
-#clock, #network, #pulseaudio, #custom-gpgstatus, #custom-addworkspace, #custom-launcher, #tray, #mode {
-    padding: 0 10px;
+#window {
+    border-bottom: 3px solid transparent;
+}
+
+#clock, #mode, #network, #pulseaudio, #custom-gpgstatus, #custom-launcher, #tray {
     border-bottom: 3px solid rgba(0, 0, 0, 0.2);
+    padding: 0 10px;
 }
 
 #clock {
@@ -68,6 +81,6 @@ window#waybar {
 }
 
 #custom-launcher {
-    background: #000000;
-    border-bottom: 3px solid #0e0e0e;
+    background: black;
+    border-color: #0e0e0e;
 }

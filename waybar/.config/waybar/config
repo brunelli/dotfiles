@@ -36,8 +36,8 @@
     },
     "network": {
         "format-wifi": "{essid} ",
-        "format-ethernet": "{ifname} ",
-        "format-disconnected": "Disconnected ⚠",
+        "format-ethernet": "",
+        "format-disconnected": "",
         "on-click": "run-in-default-terminal sudo wifi-menu",
         "on-click-right": "run-in-default-terminal sudo wifi-menu",
         "tooltip": false
