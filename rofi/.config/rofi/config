@@ -1,4 +1,6 @@
-rofi.modi: window,run,drun
+rofi.modi: run,drun
 rofi.no-lazy-grab: true
 rofi.terminal: kitty
-rofi.theme: Arc-Dark
+rofi.location: 1
+rofi.yoffset: 22
+rofi.theme: custom
