@@ -141,8 +141,10 @@ workspace_layout tabbed
 font pango:'Noto Sans Display' 8
 client.focused #0E0E0E #0E0E0E #FFFFFF #0E0E0E #0E0E0E
 
-# Status Bar
-exec waybar
+# Bar
+bar {
+    swaybar_command waybar
+}
 
 # Notification daemon
 exec mako
