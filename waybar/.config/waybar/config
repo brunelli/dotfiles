@@ -4,7 +4,7 @@
     "height": 22,
     "modules-left": ["custom/launcher", "sway/workspaces", "custom/addworkspace", "sway/mode"],
     "modules-center": ["sway/window"],
-    "modules-right": ["tray", "custom/gpgstatus", "pulseaudio", "network", "clock"],
+    "modules-right": ["tray", "pulseaudio", "network", "clock"],
     "custom/launcher": {
         "format": "",
         "on-click": "rofi-helper rofi -show drun -show-icons",
@@ -52,16 +52,7 @@
         "tooltip": false
     },
     "tray": {
-        "icon-size": 20,
-        "spacing": 10,
-        "tooltip": false
-    },
-    "custom/gpgstatus": {
-        "exec": "gpg-status",
-        "interval": 2,
-        "on-click": "gpg-status toggle",
-        "on-click-right": "gpg-status toggle",
-        "return-type": "json",
-        "tooltip": false
+        "icon-size": 16,
+        "spacing": 10
     }
 }

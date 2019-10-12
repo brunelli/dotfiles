@@ -41,7 +41,7 @@ window#waybar {
     border-bottom: 3px solid transparent;
 }
 
-#clock, #mode, #network, #pulseaudio, #custom-gpgstatus, #custom-launcher, #tray {
+#clock, #mode, #network, #pulseaudio, #custom-launcher, #tray {
     border-bottom: 3px solid rgba(0, 0, 0, 0.2);
     padding: 0 10px;
 }
@@ -69,15 +69,7 @@ window#waybar {
 }
 
 #tray {
-    background: #2980b9;
-}
-
-#custom-gpgstatus.locked {
     background: #66bb6a;
-}
-
-#custom-gpgstatus.unlocked {
-    background: #c62828;
 }
 
 #custom-launcher {

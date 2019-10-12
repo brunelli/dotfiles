@@ -3,7 +3,7 @@ set $mod Mod4
 set $term kitty
 set $menu rofi-helper rofi -show drun -show-icons
 set $run rofi-helper rofi -show run
-set $pass rofi-helper pass-copy -p pass -i
+set $pass keepassxc
 set $clip rofi-helper clipmenu-rofi
 set $lock \
     pidof swaylock > /dev/null || \
@@ -129,7 +129,8 @@ for_window [class="mpv"] floating enable
 no_focus [class="mpv"]
 for_window [title="Picture-in-picture"] floating enable
 no_focus [title="Picture-in-picture"]
-for_window [title="SpeedCrunch"] floating enable
+for_window [app_id="org.speedcrunch.speedcrunch"] floating enable
+for_window [app_id="keepassxc" title="KeePassXC-Browser *"] floating enable
 
 # Borders
 titlebar_border_thickness 0
