@@ -4,7 +4,7 @@ set $term kitty
 set $menu rofi-helper rofi -show drun -show-icons
 set $run rofi-helper rofi -show run
 set $pass keepassxc
-set $clip rofi-helper clipmenu-rofi
+set $clip rofi-helper clipman pick -t rofi
 set $lock \
     pidof swaylock > /dev/null || \
     grim - | corrupter - > /tmp/lock.png && \
@@ -44,7 +44,7 @@ bindsym $mod+d exec $menu
 bindsym Mod1+F2 exec $run
 bindsym $mod+p exec $pass
 bindsym Mod1+v exec $clip
-bindsym Mod1+Ctrl+v exec clipdel --current --delete
+bindsym Mod1+Ctrl+v exec rofi-helper clipman clear -t rofi
 bindsym $mod+m exec makoctl invoke
 floating_modifier $mod normal
 bindsym $mod+Shift+c reload
@@ -155,5 +155,8 @@ exec mako
 
 # Application launcher
 exec $menu
+
+# Clipboard manager
+exec wl-paste -t text --watch clipman store
 
 include /etc/sway/config.d/*
