@@ -1,0 +1,11 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Version=1.0
+Terminal=false
+Type=Application
+Name=scrcpy
+GenericName=Android Device
+Comment=Display and control your Android device
+Exec=scrcpy --max-size 600 --bit-rate 2M --turn-screen-off
+Icon=scrcpy
+StartupWMClass=scrcpy

@@ -2,7 +2,7 @@
 * = aria2 git vim
 
 # Laptop
-GNU/Linux = fish fontconfig imv kitty mako mpv pacman rofi sway tbsm waybar whatsapp-web yay youtube-dl
+GNU/Linux = applications fish fontconfig imv kitty mako mpv pacman rofi sway tbsm waybar yay youtube-dl
 
 # Phone (Termux)
 Android = termux

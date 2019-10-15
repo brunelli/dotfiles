@@ -131,6 +131,8 @@ for_window [title="Picture-in-picture"] floating enable
 no_focus [title="Picture-in-picture"]
 for_window [app_id="org.speedcrunch.speedcrunch"] floating enable
 for_window [app_id="keepassxc" title="KeePassXC-Browser *"] floating enable
+for_window [class="scrcpy"] floating enable
+for_window [class="scrcpy"] border none
 
 # Borders
 titlebar_border_thickness 0
