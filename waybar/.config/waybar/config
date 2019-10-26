@@ -7,7 +7,7 @@
     "modules-right": ["tray", "pulseaudio", "network", "clock"],
     "custom/launcher": {
         "format": "",
-        "on-click": "rofi-helper rofi -show drun -show-icons",
+        "on-click": "wofi --show drun --allow-images",
         "tooltip": false
     },
     "sway/workspaces": {

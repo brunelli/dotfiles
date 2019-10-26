@@ -1,0 +1,21 @@
+#!/bin/sh
+# A helper script for wofi
+
+LAUNCH="/usr/bin/wofi"
+CONFIG="$HOME/.config/wofi"
+
+set -- "${LAUNCH}" --conf "${CONFIG}" "${@}"
+
+_WOFI_PID=$(pidof wofi)
+
+if [ -z "${_WOFI_PID}" ]
+then
+    eval "${@}"
+else
+    _WOFI_INSTANCE=$(pgrep -fx "$*" || pgrep -f "$*$")
+    kill "${_WOFI_PID}"
+    if ! printf "%s" "${_WOFI_INSTANCE}" | grep -q -wv $$
+    then
+        eval "${@}"
+    fi
+fi

@@ -1,0 +1,39 @@
+#!/bin/sh
+# wofi-power: Use wofi to call systemctl for shutdown, reboot, etc
+
+USE_LOCKER=false
+EXIT_WM='swaymsg exit'
+LOCKER='swaylock'
+LAUNCHER='wofi --conf /dev/null --cache-file /dev/null --width 300 --height 150 --dmenu -p wofi-power'
+
+set "Exit window manager" "Terminate session" "Suspend system" "Hibernate system" "Reboot system" "Power-off system"
+
+OPTION=$(printf '%s\n' "$@" | eval "$LAUNCHER")
+
+if [ -n "${OPTION}" ]
+then
+    case "${OPTION}" in
+      $1)
+          eval "$EXIT_WM"
+          ;;
+      $2)
+          loginctl terminate-session "$(cat /proc/self/sessionid)"
+          ;;
+      $3)
+          [ $USE_LOCKER = true ] && eval "$LOCKER"
+          systemctl suspend
+          ;;
+      $4)
+          [ $USE_LOCKER = true ] && eval "$LOCKER"
+          systemctl hibernate
+          ;;
+      $5)
+          systemctl reboot
+          ;;
+      $6)
+          systemctl poweroff
+          ;;
+      *)
+          ;;
+    esac
+fi

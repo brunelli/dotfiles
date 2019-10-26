@@ -1,10 +1,10 @@
 ### Variables
 set $mod Mod4
 set $term kitty
-set $menu rofi-helper rofi -show drun -show-icons
-set $run rofi-helper rofi -show run
+set $menu wofi --show drun --allow-images
+set $run wofi --show run
 set $pass keepassxc
-set $clip rofi-helper clipman pick -t rofi
+set $clip clipman pick -t wofi
 set $lock \
     pidof swaylock > /dev/null || \
     grim - | corrupter - > /tmp/lock.png && \
@@ -44,11 +44,11 @@ bindsym $mod+d exec $menu
 bindsym Mod1+F2 exec $run
 bindsym $mod+p exec $pass
 bindsym Mod1+v exec $clip
-bindsym Mod1+Ctrl+v exec rofi-helper clipman clear -t rofi
+bindsym Mod1+Ctrl+v exec clipman clear -t wofi
 bindsym $mod+m exec makoctl invoke
 floating_modifier $mod normal
 bindsym $mod+Shift+c reload
-bindsym $mod+Shift+e exec rofi-helper rofi-power 'swaymsg exit'
+bindsym $mod+Shift+e exec wofi-power
 bindsym Print exec SCREENSHOT_FILE="$(xdg-user-dir SCREENSHOTS)/Screenshot_$(date '+%Y-%m-%d_%H:%M:%S').png" && grim -c "$SCREENSHOT_FILE" && imv -d -f -s none "$SCREENSHOT_FILE"
 bindsym $mod+Print exec SCREENSHOT_FILE="$(xdg-user-dir SCREENSHOTS)/Screenshot_$(date '+%Y-%m-%d_%H:%M:%S').png" && slurp | grim -g - "$SCREENSHOT_FILE" && imv -d -f -s none "$SCREENSHOT_FILE"
 bindsym Ctrl+Print exec grim -c - | wl-copy --type image/png
@@ -154,9 +154,6 @@ bar {
 
 # Notification daemon
 exec mako
-
-# Application launcher
-exec $menu
 
 # Clipboard manager
 exec wl-paste -t text --watch clipman store
