@@ -156,6 +156,7 @@ bar {
 exec mako
 
 # Clipboard manager
-exec wl-paste -t text --watch clipman store
+exec clipman restore
+exec wl-paste -t text --watch clipman store --max-items=0
 
 include /etc/sway/config.d/*
