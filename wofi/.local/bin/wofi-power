@@ -4,7 +4,7 @@
 USE_LOCKER=false
 EXIT_WM='swaymsg exit'
 LOCKER='swaylock'
-LAUNCHER='wofi --conf /dev/null --cache-file /dev/null --width 300 --height 150 --dmenu -p wofi-power'
+LAUNCHER='wofi --conf /dev/null --cache-file /dev/null --width 300 --height 160 --dmenu -p wofi-power --insensitive'
 
 set "Exit window manager" "Terminate session" "Suspend system" "Hibernate system" "Reboot system" "Power-off system"
 

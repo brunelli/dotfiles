@@ -3,8 +3,9 @@
 
 LAUNCH="/usr/bin/wofi"
 CONFIG="$HOME/.config/wofi"
+STYLE="$HOME/.config/wofi.css"
 
-set -- "${LAUNCH}" --conf "${CONFIG}" "${@}"
+set -- "${LAUNCH}" --conf "${CONFIG}" --style "${STYLE}" "${@}"
 
 _WOFI_PID=$(pidof wofi)
 

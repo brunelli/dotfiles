@@ -4,3 +4,4 @@ x=0
 y=0
 image_size=18
 term=kitty
+insensitive=true
