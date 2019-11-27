@@ -49,8 +49,8 @@ bindsym $mod+m exec makoctl invoke
 floating_modifier $mod normal
 bindsym $mod+Shift+c reload
 bindsym $mod+Shift+e exec wofi-power
-bindsym Print exec SCREENSHOT_FILE="$(xdg-user-dir SCREENSHOTS)/Screenshot_$(date '+%Y-%m-%d_%H:%M:%S').png" && grim -c "$SCREENSHOT_FILE" && imv -d -f -s none "$SCREENSHOT_FILE"
-bindsym $mod+Print exec SCREENSHOT_FILE="$(xdg-user-dir SCREENSHOTS)/Screenshot_$(date '+%Y-%m-%d_%H:%M:%S').png" && slurp | grim -g - "$SCREENSHOT_FILE" && imv -d -f -s none "$SCREENSHOT_FILE"
+bindsym Print exec SCREENSHOT_FILE="$(xdg-user-dir SCREENSHOTS)/Screenshot_$(date '+%Y-%m-%d_%H:%M:%S').png" && grim -c "$SCREENSHOT_FILE" && imv -xdf -s none "$SCREENSHOT_FILE"
+bindsym $mod+Print exec SCREENSHOT_FILE="$(xdg-user-dir SCREENSHOTS)/Screenshot_$(date '+%Y-%m-%d_%H:%M:%S').png" && slurp | grim -g - "$SCREENSHOT_FILE" && imv -xdf -s none "$SCREENSHOT_FILE"
 bindsym Ctrl+Print exec grim -c - | wl-copy --type image/png
 bindsym Ctrl+$mod+Print exec slurp | grim -g - - | wl-copy --type image/png
 
