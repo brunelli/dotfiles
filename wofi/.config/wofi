@@ -5,3 +5,4 @@ y=0
 image_size=18
 term=kitty
 insensitive=true
+run-always_parse_args=true
